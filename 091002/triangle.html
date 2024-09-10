@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+
+        void main(){
+            gl_Position = vPosition;
+        }
+
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        void main(){
+            gl_FragColor = vec4( 0.0, 0.0, 1.0, 1.0 );
+        }
+
+    </script>
+
+</head>
+<body>
+    <h1>201935124 전경훈 Ken KyoungHoon Jeon</h1>
+    <script src="../Common/webgl-utils.js"></script>
+    <script src="../Common/InitShaders.js"></script>
+    <script src="../Common/MV.js"></script>
+    <script src="./triangle.js"></script>
+
+    <canvas id="gl-canvas" width="840" height="840">
+        This browser doesn't support the HTML5 canvas element.
+    </canvas>
+
+</body>
+</html>
