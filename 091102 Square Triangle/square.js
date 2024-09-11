@@ -10,11 +10,13 @@ window.onload = function init(){
         vec2( -0.5, 0.5 ), // v0
         vec2( -0.5, -0.5 ), // v1
         vec2( 0.5, 0.5 ), // v2
-        vec2( 0.5, -0.5) // v3
+        vec2( 0.5, -0.5), // v3
+        vec2( 0.5, 0.5), // v4
+        vec2( -0.5, -0.5) // v5
     ];
     // Configure WebGL
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+    gl.clearColor( 0.0, 0.0, 0.0, 0.3 );
     // Load shaders and initialize attribute buffers
     var program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
@@ -29,6 +31,6 @@ window.onload = function init(){
     render();
 };
 function render() {
-gl.clear( gl.COLOR_BUFFER_BIT );
-gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 ); // 0, 1, 2, 2, 1, 3
+    gl.clear( gl.COLOR_BUFFER_BIT );
+    gl.drawArrays( gl.TRIANGLE_FAN, 0, 4 ); // 0, 1, 2, 2, 1, 3
 }
