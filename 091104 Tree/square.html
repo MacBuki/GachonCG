@@ -4,11 +4,10 @@
         <script id="vertex-shader" type="x-shader/x-vertex">
 
             attribute vec4 vPosition;
-            uniform vec4 uOffset;
 
             void main(){
 
-                gl_Position = vPosition + uOffset;
+                gl_Position = vPosition;
 
             }
         </script>
