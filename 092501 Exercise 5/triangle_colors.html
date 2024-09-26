@@ -30,6 +30,9 @@
 
         void main() {
             gl_FragColor = fColor;
+            gl_FragColor.r = 1.0;
+            gl_FragColor.g = 1.0;
+            gl_FragColor.rgb = gl_FragColor.gbr;
         }
     </script>
 </head>

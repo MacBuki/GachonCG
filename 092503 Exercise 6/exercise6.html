@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Rectangles</title>
+
+    <!-- Vertex Shader -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec2 vPosition;
+        uniform vec2 uResolution;
+
+        void main() {
+
+            // Convert the position from pixels to 0.0 to 1.0
+            vec2 zeroToOne = vPosition / uResolution;
+
+            // Convert from 0->1 to 0->2
+            vec2 zeroToTwo = zeroToOne * 2.0;
+
+            // Convert from 0->2 to -1->1 (clip space)
+            vec2 clipSpace = zeroToTwo - 1.0;
+
+            //gl_Position = vec4(clipSpace, 0.0, 1.0);
+            // Flip the y-axis to match top-left corner as origin
+            gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+        }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform vec4 uColor;
+
+        void main() {
+            gl_FragColor = uColor;
+        }
+    </script>
+
+    <!-- WebGL Utilities and Shader Initialization -->
+    <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="../Common/initShaders.js"></script>
+    <script type="text/javascript" src="../Common/MV.js"></script>
+    <script type="text/javascript" src="square_random.js"></script>
+</head>
+<body>
+    <h1>Random Rectangles</h1>
+    <h1>201935124 전경훈 Ken KyoungHoon Jeon</h1>
+
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+</html>

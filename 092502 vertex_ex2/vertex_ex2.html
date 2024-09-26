@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vertex_ex2</title>
+
+    <!-- Vertex Shader -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        uniform vec2 vResolution;
+
+        void main() {
+            // convert the position from pixels to 0.0 to 1.0
+            vec2 zeroToOne = vPosition.xy / vResolution;
+
+            // convert from 0.0->1.0 to 0.0->2.0
+            vec2 zeroToTwo = zeroToOne * 2.0;
+
+            // convert from 0.0->2.0 to -1.0->1.0 (clip space)
+            vec2 clipSpace = zeroToTwo - 1.0;
+
+            // gl_Position = vec4(clipSpace, 0.0, 1.0);
+            // flip Y to get the more traditional top left corner used for 2d graphics APIs
+            gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+        }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        void main() {
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5); // Red color with 50% opacity (R, G, B, A)
+        }
+    </script>
+
+</head>
+<body>
+    <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="../Common/initShaders.js"></script>
+    <script type="text/javascript" src="vertex_ex2.js"></script>
+
+    <canvas id="gl-canvas" width="400" height="300">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+</html>
