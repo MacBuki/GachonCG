@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>3D Sierpinski Gasket</title>
+    <title>Rotating Square</title>
 
     <!-- Vertex Shader -->
     <script id="vertex-shader" type="x-shader/x-vertex">
-        attribute vec3 vPosition;
-        attribute vec3 vColor;
-        varying vec4 color;
+        attribute vec4 vPosition;
+        uniform float theta;
 
         void main() {
-            gl_Position = vec4(vPosition, 1.0);
-            color = vec4(vColor, 1.0);
+            float s = sin(theta);
+            float c = cos(theta);
+
+            gl_Position.x = c * vPosition.x - s * vPosition.y;
+            gl_Position.y = s * vPosition.x + c * vPosition.y;
+            gl_Position.z = 0.0;
+            gl_Position.w = 1.0;
         }
     </script>
 
@@ -20,10 +23,8 @@
     <script id="fragment-shader" type="x-shader/x-fragment">
         precision mediump float;
 
-        varying vec4 color;
-
         void main() {
-            gl_FragColor = color;
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
         }
     </script>
 
@@ -31,9 +32,15 @@
     <script type="text/javascript" src="../Common/webgl-utils.js"></script>
     <script type="text/javascript" src="../Common/initShaders.js"></script>
     <script type="text/javascript" src="../Common/MV.js"></script>
-    <script type="text/javascript" src="gasket4.js"></script>
+    <script type="text/javascript" src="rotatingSquare2.js"></script>
 </head>
 <body>
+    <button id="Direction">Change Rotation Direction</button>
+    <select id="Controls" size="3">
+        <option value="0">Toggle Rotation Direction</option>
+        <option value="1">Spin Faster</option>
+        <option value="2">Spin Slower</option>
+    </select>
     <canvas id="gl-canvas" width="512" height="512">
         Oops ... your browser doesn't support the HTML5 canvas element.
     </canvas>
