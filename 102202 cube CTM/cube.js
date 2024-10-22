@@ -1,16 +1,16 @@
+var canvas;
 var gl;
 var points = [];
 var colors = [];
 var theta = [0, 0, 0];
 var thetaLoc;
+var modelViewMatrixLoc;
 
 var xAxis = 0;
 var yAxis = 1;
 var zAxis = 2;
-
 var axis = 0;
 var numVertices = 36; // 총 36개의 정점 (6면 * 6정점)
-
 
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
@@ -24,13 +24,9 @@ window.onload = function init() {
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
-
     gl.enable(gl.DEPTH_TEST);
 
-    //
-    //  Load shaders and initialize attribute buffers
-    //
-
+    // 셰이더를 로드하고 속성 버퍼를 초기화합니다.
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
@@ -50,75 +46,58 @@ window.onload = function init() {
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
-    thetaLoc = gl.getUniformLocation(program, "theta");
+    modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
 
-    //event listeners for buttons
-
+    // 버튼 이벤트 리스너 설정
     document.getElementById("xButton").onclick = function () {
         axis = xAxis;
-        render();
     };
-
     document.getElementById("yButton").onclick = function () {
         axis = yAxis;
-        render();
     };
-
     document.getElementById("zButton").onclick = function () {
         axis = zAxis;
-        render();
     };
 
     render();
 }
 
 function colorCube() {
-    quad(1, 0, 3, 2);   //blue
-    quad(2, 3, 7, 6);   //yellow
-    quad(3, 0, 4, 7);   //green
-    quad(6, 5, 1, 2);   //cyan
-    quad(4, 5, 6, 7);   //red
-    quad(5, 4, 0, 1);   //magenta
+    quad(1, 0, 3, 2);   // 파란색 면
+    quad(2, 3, 7, 6);   // 노란색 면
+    quad(3, 0, 4, 7);   // 초록색 면
+    quad(6, 5, 1, 2);   // 청록색 면
+    quad(4, 5, 6, 7);   // 빨간색 면
+    quad(5, 4, 0, 1);   // 자홍색 면
 }
 
 function quad(a, b, c, d) {
     var vertices = [
-        vec4(-0.5, -0.5, 0.5, 1.0),     //0
-        vec4(-0.5, 0.5, 0.5, 1.0),      //1
-        vec4(0.5, 0.5, 0.5, 1.0),       //2
-        vec4(0.5, -0.5, 0.5, 1.0),      //3
-        vec4(-0.5, -0.5, -0.5, 1.0),    //4
-        vec4(-0.5, 0.5, -0.5, 1.0),     //5
-        vec4(0.5, 0.5, -0.5, 1.0),      //6
-        vec4(0.5, -0.5, -0.5, 1.0)      //7
+        vec4(-0.5, -0.5, 0.5, 1.0),     // 0번 정점
+        vec4(-0.5, 0.5, 0.5, 1.0),      // 1번 정점
+        vec4(0.5, 0.5, 0.5, 1.0),       // 2번 정점
+        vec4(0.5, -0.5, 0.5, 1.0),      // 3번 정점
+        vec4(-0.5, -0.5, -0.5, 1.0),    // 4번 정점
+        vec4(-0.5, 0.5, -0.5, 1.0),     // 5번 정점
+        vec4(0.5, 0.5, -0.5, 1.0),      // 6번 정점
+        vec4(0.5, -0.5, -0.5, 1.0)      // 7번 정점
     ];
 
     var vertexColors = [
-        [0.0, 0.0, 0.0, 1.0],  // black
-        [1.0, 0.0, 0.0, 1.0],  // red
-        [1.0, 1.0, 0.0, 1.0],  // yellow
-        [0.0, 1.0, 0.0, 1.0],  // green
-        [0.0, 0.0, 1.0, 1.0],  // blue
-        [1.0, 0.0, 1.0, 1.0],  // magenta
-        [0.0, 1.0, 1.0, 1.0],  // cyan
-        [1.0, 1.0, 1.0, 1.0]   // white
+        [0.0, 0.0, 0.0, 1.0],  // 검정색
+        [1.0, 0.0, 0.0, 1.0],  // 빨간색
+        [1.0, 1.0, 0.0, 1.0],  // 노란색
+        [0.0, 1.0, 0.0, 1.0],  // 초록색
+        [0.0, 0.0, 1.0, 1.0],  // 파란색
+        [1.0, 0.0, 1.0, 1.0],  // 자홍색
+        [0.0, 1.0, 1.0, 1.0],  // 청록색
+        [1.0, 1.0, 1.0, 1.0]   // 흰색
     ];
 
-    // We need to parition the quad into two triangles in order for
-    // WebGL to be able to render it.  In this case, we create two
-    // triangles from the quad indices
-
-    //vertex color assigned by the index of the vertex
-
-    var indices = [a, b, c, a, c, d]; // 1 0 3, 1 3 2 // 4 5 6, 4 6 7 // ...
-
-    console.log(indices);
+    var indices = [a, b, c, a, c, d];
 
     for (var i = 0; i < indices.length; ++i) {
         points.push(vertices[indices[i]]);
-        //colors.push(vertexColors[i]);
-
-        // for solid colored faces use
         colors.push(vertexColors[a]);
     }
 }
@@ -126,9 +105,16 @@ function quad(a, b, c, d) {
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    theta[axis] += 2.0;
-    gl.uniform3fv(thetaLoc, theta);
+    theta[axis] += 2.0; // 각도 업데이트
+
+    // CTM을 사용하여 변환 적용
+    var ctm = mat4();
+    ctm = mult(ctm, rotate(theta[zAxis], 0, 0, 1)); // Z축 회전
+    ctm = mult(ctm, rotate(theta[yAxis], 0, 1, 0)); // Y축 회전
+    ctm = mult(ctm, rotate(theta[xAxis], 1, 0, 0)); // X축 회전
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(ctm));
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
-    //requestAnimFrame(render);
+    requestAnimFrame(render);
 }
