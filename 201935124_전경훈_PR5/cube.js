@@ -130,5 +130,5 @@ function render() {
     gl.uniform3fv(thetaLoc, theta);
 
     gl.drawArrays(gl.TRIANGLES, 0, numVertices);
-    requestAnimFrame(render);
+    //requestAnimFrame(render);
 }
