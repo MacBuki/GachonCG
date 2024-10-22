@@ -5,6 +5,7 @@ var colors = [];
 var theta = [0, 0, 0];
 var thetaLoc;
 var modelViewMatrixLoc;
+var rotationSpeed = 2.0; // 초기 회전 속도
 
 var xAxis = 0;
 var yAxis = 1;
@@ -59,6 +60,11 @@ window.onload = function init() {
         axis = zAxis;
     };
 
+    // 슬라이드바 이벤트 리스너 설정
+    document.getElementById("speedSlider").oninput = function (event) {
+        rotationSpeed = parseFloat(event.target.value);
+    };
+
     render();
 }
 
@@ -105,7 +111,7 @@ function quad(a, b, c, d) {
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    theta[axis] += 2.0; // 각도 업데이트
+    theta[axis] += rotationSpeed; // 슬라이드바 값에 따라 회전 속도 조절
 
     // CTM을 사용하여 변환 적용
     var ctm = mat4();

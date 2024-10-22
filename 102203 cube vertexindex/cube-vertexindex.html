@@ -3,18 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cube CTM with Speed Control</title>
+    <title>Cube Vertex Index</title>
 
     <!-- Vertex Shader -->
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
         attribute vec4 vColor;
         varying vec4 fColor;
-        uniform mat4 modelViewMatrix;
+        uniform vec3 theta;
 
         void main() {
+            // Rotation matrices for x, y, z axes
+            vec3 angles = radians(theta);
+            vec3 c = cos(angles);
+            vec3 s = sin(angles);
+
+            mat4 rx = mat4(1.0, 0.0, 0.0, 0.0,
+                           0.0, c.x, -s.x, 0.0,
+                           0.0, s.x, c.x, 0.0,
+                           0.0, 0.0, 0.0, 1.0);
+
+            mat4 ry = mat4(c.y, 0.0, s.y, 0.0,
+                           0.0, 1.0, 0.0, 0.0,
+                           -s.y, 0.0, c.y, 0.0,
+                           0.0, 0.0, 0.0, 1.0);
+
+            mat4 rz = mat4(c.z, -s.z, 0.0, 0.0,
+                           s.z, c.z, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0);
+
+            gl_Position = rz * ry * rx * vPosition;
             fColor = vColor;
-            gl_Position = modelViewMatrix * vPosition;
         }
     </script>
 
@@ -28,15 +48,13 @@
         }
     </script>
 
-    <!-- Include WebGL utilities -->
     <script type="text/javascript" src="../Common/webgl-utils.js"></script>
     <script type="text/javascript" src="../Common/initShaders.js"></script>
     <script type="text/javascript" src="../Common/MV.js"></script>
-    <script type="text/javascript" src="cube_ctm.js"></script>
+    <script type="text/javascript" src="cube-vertexindex.js"></script>
 </head>
 <body>
-
-    <h1>Cube with CTM and Speed Control</h1>
+    <h1>Cube Vertex Index Rendering</h1>
 
     <canvas id="gl-canvas" width="512" height="512">
         Oops ... your browser doesn't support the HTML5 canvas element.
@@ -46,12 +64,8 @@
     <button id="yButton">Rotate Y</button>
     <button id="zButton">Rotate Z</button>
 
-    <br><br>
-    <label for="speedSlider">Rotation Speed:</label>
-    <input type="range" id="speedSlider" min="0" max="10" value="2" step="0.1">
-
     <script>
-        // JavaScript code will be loaded from cube_ctm.js
+        // JavaScript code will be loaded from cube-vertexindex.js
     </script>
 </body>
 </html>
