@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Cubes with Perspective View</title>
+
+        <!-- Vertex Shader -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute vec4 vColor;
+        varying vec4 fcolor;
+
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+
+        void main() {
+            mat4 syz = mat4( 0.5, 0.0, 0.0, 0.0,
+            0.0, 0.5, 0.0, 0.0,
+            0.0, 0.0, 0.5, 0.0,
+            0.0, 0.0, 0.0, 1.0 );
+
+
+            gl_Position = syz * projectionMatrix * modelViewMatrix * vPosition;
+            fcolor = vColor;
+        }
+    </script>
+    
+    <!-- Fragment Shader -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        #ifdef GL_ES
+        precision highp float;
+        #endif
+    
+        varying vec4 fcolor;
+    
+        void main() {
+            gl_FragColor = fcolor;
+        }
+    </script>
+    
+        <!-- WebGL Utilities and Shader Initialization -->
+        <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="../Common/initShaders.js"></script>
+        <script type="text/javascript" src="../Common/MV.js"></script>
+        <script type="text/javascript" src="perspective2_three_cubes.js"></script>
+</head>
+<body>
+
+    <h1>201935124 전경훈 Ken KyoungHoon Jeon</h1>
+
+
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element.
+    </canvas>
+
+    <br>
+
+    <div>
+        zNear .01 <input id="zNearSlider" type="range" 
+        min=".01" max="3" step="0.1" value="0.3" />
+        3
+    </div>
+    <div>
+        zFar 3 <input id="zFarSlider" type="range" 
+        min="3" max="10" step="3.0" value="3" />
+        10
+    </div>
+    <div>
+        radius 0.05 <input id="radiusSlider" type="range"
+        min="0.05" max="10" step="0.1" value="4" />
+        10
+    </div>
+    <div>
+        theta -90 <input id="thetaSlider" type="range" 
+        min="-90" max="90" step="5" value="0" />
+        90
+    </div>
+    <div>
+        phi -90 <input id="phiSlider" type="range" 
+        min="-90" max="90" step="5" value="0" />
+        90
+    </div>
+    <div>
+        fov 10 <input id="fovSlider" type="range" 
+        min="10" max="120" step="5" value="45" />
+        120
+    </div>
+    <div>
+        aspect 0.5 <input id="aspectSlider" type="range" 
+        min="0.5" max="2" step="0.1" value="1" />
+        2
+    </div>
+</body>
+</html>
