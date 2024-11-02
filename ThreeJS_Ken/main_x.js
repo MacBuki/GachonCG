@@ -70,5 +70,5 @@ loader.load(
 );
 
 // 기존 카메라 설정
-camera.position.set(0, 1.5, 4); // x, y, z 값 조정
+camera.position.set(0, 1, 2.5); // x, y, z 값 조정
 camera.lookAt(0, 0, 0); // 카메라가 모델의 중심을 바라보게 설정

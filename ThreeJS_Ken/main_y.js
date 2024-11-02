@@ -58,7 +58,7 @@ loader.load(
     // 애니메이션 함수
     function animate() {
       requestAnimationFrame(animate);
-      model.rotation.x += 0.005; // 회전 속도
+      model.rotation.y += 0.005; // 회전 속도
       renderer.render(scene, camera);
     }
     animate();
@@ -70,5 +70,5 @@ loader.load(
 );
 
 // 기존 카메라 설정
-camera.position.set(0, 1.5, 4); // x, y, z 값 조정
+camera.position.set(0, 1.5, 3); // x, y, z 값 조정
 camera.lookAt(0, 0, 0); // 카메라가 모델의 중심을 바라보게 설정
